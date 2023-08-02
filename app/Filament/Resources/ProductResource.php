@@ -24,7 +24,7 @@ class ProductResource extends Resource
         return $form
             ->schema([
                 Forms\Components\TextInput::make('name')->required(),
-                Forms\Components\TextInput::make('price')->required(),
+                Forms\Components\TextInput::make('price')->required()->rule('numeric'),
             ]);
     }
 
