@@ -32,8 +32,8 @@ class ProductResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('name'),
-                Tables\Columns\TextColumn::make('price'),
+                Tables\Columns\TextColumn::make('name')->sortable(),
+                Tables\Columns\TextColumn::make('price')->sortable(),
             ])
             ->filters([
                 //
@@ -46,6 +46,7 @@ class ProductResource extends Resource
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ])
+            ->defaultSort('price', 'desc')
             ->emptyStateActions([
                 Tables\Actions\CreateAction::make(),
             ]);
