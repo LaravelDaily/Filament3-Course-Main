@@ -2,7 +2,6 @@
 
 namespace App\Filament\Resources;
 
-use App\Enums\ProductStatus;
 use App\Filament\Resources\ProductResource\Pages;
 use App\Filament\Resources\ProductResource\RelationManagers;
 use App\Models\Product;
@@ -20,18 +19,20 @@ class ProductResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
+    protected static array $statuses = [
+        'in stock' => 'in stock',
+        'sold out' => 'sold out',
+        'coming soon' => 'coming soon',
+    ];
+
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('name')->required(),
+                Forms\Components\TextInput::make('name')->required()->unique(ignoreRecord: true),
                 Forms\Components\TextInput::make('price')->required(),
                 Forms\Components\Radio::make('status')
-                    ->options([
-                        'in stock' => 'in stock',
-                        'sold out' => 'sold out',
-                        'coming soon' => 'coming soon',
-                    ]),
+                    ->options(self::$statuses),
                 Forms\Components\Select::make('category_id')
                     ->relationship('category', 'name'),
             ]);
@@ -48,14 +49,45 @@ class ProductResource extends Resource
                     ->money('usd')
                     ->getStateUsing(function (Product $record): float {
                         return $record->price / 100;
-                    }),
-                Tables\Columns\TextColumn::make('status'),
-                Tables\Columns\TextColumn::make('category.name'),
-                Tables\Columns\TextColumn::make('tags.name'),
+                    })
+                    ->alignRight(),
+                Tables\Columns\CheckboxColumn::make('is_active'),
+                Tables\Columns\SelectColumn::make('status')
+                    ->options(self::$statuses),
+                Tables\Columns\TextColumn::make('category.name')
+                    ->label('Category name'),
+                Tables\Columns\TextColumn::make('tags.name')
+                    ->badge(),
             ])
             ->filters([
-                //
-            ])
+                Tables\Filters\SelectFilter::make('status')
+                    ->options(self::$statuses),
+                Tables\Filters\SelectFilter::make('category')
+                    ->relationship('category', 'name'),
+                Tables\Filters\Filter::make('created_from')
+                    ->form([
+                        Forms\Components\DatePicker::make('created_from'),
+                    ])
+                    ->query(function (Builder $query, array $data): Builder {
+                        return $query
+                            ->when(
+                                $data['created_from'],
+                                fn (Builder $query, $date): Builder => $query->whereDate('created_at', '>=', $date),
+                            );
+                    }),
+                Tables\Filters\Filter::make('created_until')
+                    ->form([
+                        Forms\Components\DatePicker::make('created_until'),
+                    ])
+                    ->query(function (Builder $query, array $data): Builder {
+                        return $query
+                            ->when(
+                                $data['created_until'],
+                                fn (Builder $query, $date): Builder => $query->whereDate('created_at', '<=', $date),
+                            );
+                    }),
+            ], layout: Tables\Enums\FiltersLayout::AboveContent)
+            ->filtersFormColumns(4)
             ->actions([
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
