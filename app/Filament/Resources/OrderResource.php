@@ -50,8 +50,8 @@ class OrderResource extends Resource
                 //
             ])
             ->actions([
-//                Tables\Actions\ActionGroup::make([
-//                    Tables\Actions\EditAction::make(),
+                Tables\Actions\ActionGroup::make([
+                    Tables\Actions\EditAction::make(),
 //                    Tables\Actions\Action::make('Mark Completed')
 //                        ->requiresConfirmation()
 //                        ->hidden(fn (Order $record) => $record->is_completed)
@@ -68,7 +68,7 @@ class OrderResource extends Resource
                         ->action(function (Order $order, array $data): void {
                             $order->update(['is_completed' => $data['is_completed']]);
                         }),
-//                ])
+                ])
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
