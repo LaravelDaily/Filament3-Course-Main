@@ -19,6 +19,8 @@ class ProductResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
+    protected static ?int $navigationSort = 2;
+
     protected static array $statuses = [
         'in stock' => 'in stock',
         'sold out' => 'sold out',
@@ -62,7 +64,7 @@ class ProductResource extends Resource
                         return $record->price / 100;
                     })
                     ->alignRight(),
-                Tables\Columns\CheckboxColumn::make('is_active'),
+                Tables\Columns\ToggleColumn::make('is_active'),
                 Tables\Columns\SelectColumn::make('status')
                     ->options(self::$statuses),
                 Tables\Columns\TextColumn::make('category.name')
