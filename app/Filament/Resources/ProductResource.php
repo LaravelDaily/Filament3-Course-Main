@@ -32,15 +32,16 @@ class ProductResource extends Resource
         return $form
             ->schema([
                 Forms\Components\Wizard::make([
-                    Forms\Components\Wizard\Step::make('Main data')
+                    Forms\Components\Wizard\Step::make(__('Main data'))
                         ->schema([
                             Forms\Components\TextInput::make('name')
+                                ->label(__('Product name'))
                                 ->required()
                                 ->unique(ignoreRecord: true),
                             Forms\Components\TextInput::make('price')
                                 ->required(),
                         ]),
-                    Forms\Components\Wizard\Step::make('Additional data')
+                    Forms\Components\Wizard\Step::make(__('Additional data'))
                         ->schema([
                             Forms\Components\Radio::make('status')
                                 ->options(self::$statuses),
@@ -130,5 +131,10 @@ class ProductResource extends Resource
             'create' => Pages\CreateProduct::route('/create'),
             'edit' => Pages\EditProduct::route('/{record}/edit'),
         ];
+    }
+
+    public static function getNavigationLabel(): string
+    {
+        return __('Products');
     }
 }

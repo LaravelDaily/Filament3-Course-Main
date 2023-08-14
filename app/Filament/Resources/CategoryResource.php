@@ -40,7 +40,7 @@ class CategoryResource extends Resource
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('products_count')
-                    ->label('Products')
+                    ->label(__('Products'))
                     ->counts('products'),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
