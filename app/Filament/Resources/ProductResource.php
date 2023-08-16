@@ -7,10 +7,13 @@ use App\Filament\Resources\ProductResource\RelationManagers;
 use App\Models\Product;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Infolists;
+use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class ProductResource extends Resource
@@ -20,6 +23,10 @@ class ProductResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     protected static ?int $navigationSort = 2;
+
+    protected static ?string $recordTitleAttribute = 'name';
+
+    protected static int $globalSearchResultsLimit = 3;
 
     protected static array $statuses = [
         'in stock' => 'in stock',
@@ -103,6 +110,7 @@ class ProductResource extends Resource
             ], layout: Tables\Enums\FiltersLayout::AboveContent)
             ->filtersFormColumns(4)
             ->actions([
+                Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
             ])
@@ -130,11 +138,33 @@ class ProductResource extends Resource
             'index' => Pages\ListProducts::route('/'),
             'create' => Pages\CreateProduct::route('/create'),
             'edit' => Pages\EditProduct::route('/{record}/edit'),
+            'view' => Pages\ViewProduct::route('/{record}'),
         ];
+    }
+
+    public static function infolist(Infolist $infolist): Infolist
+    {
+        return $infolist
+            ->schema([
+                Infolists\Components\TextEntry::make('name'),
+                Infolists\Components\TextEntry::make('price'),
+                Infolists\Components\TextEntry::make('is_active'),
+                Infolists\Components\TextEntry::make('status'),
+            ]);
     }
 
     public static function getNavigationLabel(): string
     {
         return __('Products');
+    }
+
+    public static function getGlobalSearchResultUrl(Model $record): string
+    {
+        return self::getUrl('view', ['record' => $record]);
+    }
+
+    public static function getGloballySearchableAttributes(): array
+    {
+        return ['name', 'description'];
     }
 }
