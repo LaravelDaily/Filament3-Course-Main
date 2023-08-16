@@ -16,4 +16,11 @@ class ListOrders extends ListRecords
             Actions\CreateAction::make(),
         ];
     }
+
+    protected function getHeaderWidgets(): array
+    {
+        return [
+            OrderResource\Widgets\TotalOrders::class
+        ];
+    }
 }
