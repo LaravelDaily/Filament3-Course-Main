@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Company;
 use App\Models\Product;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -22,6 +23,7 @@ class OrderFactory extends Factory
         $orderTime = now()->subMinutes(rand(10, 100000));
         return [
             'user_id' => User::inRandomOrder()->value('id'),
+            'company_id' => Company::inRandomOrder()->value('id'),
             'product_id' => $product->id,
             'price' => $product->price,
             'created_at' => $orderTime,
