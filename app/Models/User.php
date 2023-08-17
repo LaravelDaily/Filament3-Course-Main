@@ -24,6 +24,7 @@ class User extends Authenticatable implements FilamentUser
         'email',
         'password',
         'is_admin',
+        'is_accountant'
     ];
 
     /**
@@ -49,6 +50,12 @@ class User extends Authenticatable implements FilamentUser
     public function canAccessPanel(Panel $panel): bool
     {
         return true;
-        return $this->is_admin == 1;
+        if ($panel->id === 'admin') {
+            return $this->is_admin === 1;
+        }
+
+        if ($panel->id === 'accountant') {
+            return $this->is_accounant === 1;
+        }
     }
 }
