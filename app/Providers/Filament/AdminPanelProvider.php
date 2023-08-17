@@ -56,6 +56,9 @@ class AdminPanelProvider extends PanelProvider
             ->authMiddleware([
                 Authenticate::class,
             ])
-            ->globalSearchKeyBindings(['command+k', 'ctrl+k']);
+            ->globalSearchKeyBindings(['command+k', 'ctrl+k'])
+            ->plugins([
+                \BezhanSalleh\FilamentShield\FilamentShieldPlugin::make()
+            ]);
     }
 }
