@@ -58,7 +58,6 @@ class OrderResource extends Resource
             ])
             ->actions([
                 Tables\Actions\ActionGroup::make([
-                    Tables\Actions\EditAction::make(),
 //                    Tables\Actions\Action::make('Mark Completed')
 //                        ->requiresConfirmation()
 //                        ->hidden(fn (Order $record) => $record->is_completed)
