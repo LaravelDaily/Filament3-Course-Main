@@ -17,7 +17,7 @@ class OrderPolicy
         }
 
         if (Filament::getCurrentPanel()->getId() === 'accountant') {
-            return $user->is_accountant == 1 || $user->is_admin;
+            return $user->is_accountant == 1 || $user->is_admin == 1;
         }
 
         return false;
