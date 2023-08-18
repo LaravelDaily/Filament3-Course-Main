@@ -44,7 +44,11 @@ class ProductResource extends Resource
                             Forms\Components\TextInput::make('name')
                                 ->label(__('Product name'))
                                 ->required()
-                                ->unique(ignoreRecord: true),
+                                ->unique(ignoreRecord: true)
+                                ->live(onBlur: true)
+                                ->afterStateUpdated(fn (Forms\Set $set, ?string $state) => $set('slug', str()->slug($state))),
+                            Forms\Components\TextInput::make('slug')
+                                ->required(),
                             Forms\Components\TextInput::make('price')
                                 ->required(),
                         ]),
