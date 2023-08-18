@@ -48,6 +48,7 @@ class ProductResource extends Resource
                                 ->live(onBlur: true)
                                 ->afterStateUpdated(fn (Forms\Set $set, ?string $state) => $set('slug', str()->slug($state))),
                             Forms\Components\TextInput::make('slug')
+                                ->disabledOn('edit')
                                 ->required(),
                             Forms\Components\TextInput::make('price')
                                 ->required(),
