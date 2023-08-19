@@ -25,6 +25,11 @@ class UserResource extends Resource
             ->schema([
                 Forms\Components\TextInput::make('name'),
                 Forms\Components\TextInput::make('email')->email(),
+                Forms\Components\Select::make('roles')
+                    ->preload()
+                    ->multiple()
+                    ->relationship('roles', 'name')
+                    ->columnSpan('full'),
             ]);
     }
 
@@ -34,6 +39,7 @@ class UserResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('name'),
                 Tables\Columns\TextColumn::make('email'),
+                Tables\Columns\TextColumn::make('roles.name'),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime(),
             ])

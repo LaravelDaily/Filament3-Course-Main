@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Spatie\Permission\Traits\HasRoles;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -13,6 +14,7 @@ use Laravel\Sanctum\HasApiTokens;
 class User extends Authenticatable implements FilamentUser
 {
     use HasApiTokens, HasFactory, Notifiable;
+    use HasRoles;
 
     /**
      * The attributes that are mass assignable.
@@ -49,13 +51,13 @@ class User extends Authenticatable implements FilamentUser
 
     public function canAccessPanel(Panel $panel): bool
     {
-        return true;
-        if ($panel->id === 'admin') {
-            return $this->is_admin === 1;
+//        return true;
+        if ($panel->getId() === 'admin') {
+            return $this->hasRole('super_admin');
         }
 
-        if ($panel->id === 'accountant') {
-            return $this->is_accounant === 1;
+        if ($panel->getId() === 'accountant') {
+            return $this->hasRole('accountant');
         }
     }
 }
