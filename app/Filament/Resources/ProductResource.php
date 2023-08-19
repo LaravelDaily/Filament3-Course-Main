@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use App\Enums\ProductStatus;
 use App\Filament\Resources\ProductResource\Pages;
 use App\Filament\Resources\ProductResource\RelationManagers;
 use App\Models\Product;
@@ -56,7 +57,7 @@ class ProductResource extends Resource
                     Forms\Components\Wizard\Step::make(__('Additional data'))
                         ->schema([
                             Forms\Components\Radio::make('status')
-                                ->options(self::$statuses),
+                                ->options(ProductStatus::class),
                             Forms\Components\Select::make('category_id')
                                 ->relationship('category', 'name'),
                         ]),
@@ -78,8 +79,10 @@ class ProductResource extends Resource
                     })
                     ->alignRight(),
                 Tables\Columns\ToggleColumn::make('is_active'),
-                Tables\Columns\SelectColumn::make('status')
-                    ->options(self::$statuses),
+                Tables\Columns\TextColumn::make('status')
+                    ->badge(),
+//                Tables\Columns\SelectColumn::make('status')
+//                    ->options(ProductStatus::class),
                 Tables\Columns\TextColumn::make('category.name')
                     ->label('Category name'),
                 Tables\Columns\TextColumn::make('tags.name')
@@ -87,7 +90,7 @@ class ProductResource extends Resource
             ])
             ->filters([
                 Tables\Filters\SelectFilter::make('status')
-                    ->options(self::$statuses),
+                    ->options(ProductStatus::class),
                 Tables\Filters\SelectFilter::make('category')
                     ->relationship('category', 'name'),
                 Tables\Filters\Filter::make('created_from')

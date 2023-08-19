@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\ProductStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -19,6 +20,10 @@ class Product extends Model
         'category_id',
         'is_active',
         'description',
+    ];
+
+    protected $casts = [
+        'status' => ProductStatus::class
     ];
 
     public function category(): BelongsTo
